@@ -25,48 +25,47 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 	 *  
 	 *  Note, while a 5 is used above any "Type" could be contained in the node
 	 */
-	static class Node<Type>
-	{
-	  //FIXME: create a data element of the Given Type
-	  //FIXME: create a left and right reference to other nodes
-	  
-	  //FIXME: write a constructor that simplifies building an initial node
-	  Node( Type the_data );
-	  
-	  /**
-	   * 
-	   * This function must be written recursively.
-	   *
-	   * Height is defined as the 1 plus the maximum height of the left vs right sub tree
-	   * 
-	   * @return the height from this node to its leaves
-	   *         
-	   * 
-	   */
-	  int
-	  height();
-	  
-	  /**
-	   * recursive determine if the item is in this node or the nodes after
-	   * 
-	   * @param item
-	   *            - needle
-	   * @return true if item in tree
-	   */
-	   boolean contains( Type item );
+	static class Node<Type> {
+		
+		Type data;
+		Node<Type> left;
+		Node<Type> right;
 
-	  /**
-	   * recursive - add a node
-	   * 
-	   * @param item
-	   *            - data to add
-	   * @return 
-	   */
-	   void insert( Type item );
-			
+		// FIXME: write a constructor that simplifies building an initial node
+		Node(Type the_data);
+
+		/**
+		 * 
+		 * This function must be written recursively.
+		 *
+		 * Height is defined as the 1 plus the maximum height of the left vs
+		 * right sub tree
+		 * 
+		 * @return the height from this node to its leaves
+		 * 
+		 * 
+		 */
+		int height();
+
+		/**
+		 * recursive determine if the item is in this node or the nodes after
+		 * 
+		 * @param item
+		 *            - needle
+		 * @return true if item in tree
+		 */
+		boolean contains(Type item);
+
+		/**
+		 * recursive - add a node
+		 * 
+		 * @param item
+		 *            - data to add
+		 * @return
+		 */
+		void insert(Type item);
 
 	}
-
 	
 	
 	@Override

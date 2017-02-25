@@ -20,5 +20,9 @@ public class BinarySearchTreeTest {
 	public void test() {
 		fail("Not yet implemented");
 	}
+	
+	// --------- INNER NODE CLASS TESTS ----------
+	
+	
 
 }

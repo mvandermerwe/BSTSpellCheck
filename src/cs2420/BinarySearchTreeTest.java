@@ -191,6 +191,12 @@ public class BinarySearchTreeTest {
 	}
 	
 	public void testFirst() {
+		assertTrue(-1 == sampleTree.first());
+		assertTrue(4 == sampleTree.first());
+		
+		try {
+			
+		}
 		
 	}
 

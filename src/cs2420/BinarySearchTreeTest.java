@@ -3,12 +3,19 @@ package cs2420;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Arrays;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test of our BinarySearchTree implementation.
+ * 
+ * @author jjgarzella and Mark Van der Merwe
+ *
+ */
 public class BinarySearchTreeTest {
 
 	BinarySearchTree.Node<Integer> sampleNode;
@@ -20,8 +27,11 @@ public class BinarySearchTreeTest {
 	
 	List<Integer> listOfNumbers;
 	
+	/**
+	 * Create some nodes and trees to work with.
+	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		sampleNode = new BinarySearchTree.Node<>(7);
 		sampleNode.insert(5);
 		sampleNode.insert(9);
@@ -42,15 +52,6 @@ public class BinarySearchTreeTest {
 		Integer[] numbersToAdd = {10,20,30};
 		listOfNumbers = Arrays.asList(numbersToAdd);
 
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
-	@Test
-	public void test() {
-		fail("Not yet implemented");
 	}
 	
 	// --------- INNER NODE CLASS TESTS ----------
@@ -183,7 +184,7 @@ public class BinarySearchTreeTest {
 	
 		listOfNumbers.add(1, null);
 		try {
-			oneNodeTree.addAll(listOfNumbers);
+			oneNodeTree.containsAll(listOfNumbers);
 			fail("Failed to throw exception on null containsAll");
 		} catch (NullPointerException e) {
 			// test passes!!
@@ -192,12 +193,91 @@ public class BinarySearchTreeTest {
 	
 	public void testFirst() {
 		assertTrue(-1 == sampleTree.first());
-		assertTrue(4 == sampleTree.first());
+		assertTrue(4 == oneNodeTree.first());
 		
 		try {
-			
+			emptyTree.first();
+			fail("Failed to throw exeption on getting from empty tree");
+		} catch (NoSuchElementException e) {
+			// test passes!!
 		}
+	}
+	
+	public void testLast() {
+		assertTrue(7 == sampleTree.last());
+		assertTrue(4 == sampleTree.last());
 		
+		try {
+			emptyTree.last();
+			fail("Failed to throw exeption on getting from empty tree");
+		} catch (NoSuchElementException e) {
+			// test passes!!
+		}
 	}
 
+	public void testIsEmpty() {
+		assertFalse(sampleTree.isEmpty());
+		assertFalse(oneNodeTree.isEmpty());
+		assertTrue(emptyTree.isEmpty());
+	}
+	
+	public void remove() {
+		assertTrue(sampleTree.remove(4));
+		assertFalse(sampleTree.contains(4));
+		assertFalse(sampleTree.remove(2048));
+		
+		assertTrue(oneNodeTree.remove(4));
+		assertTrue(oneNodeTree.isEmpty());
+		assertFalse(oneNodeTree.remove(4096));
+		
+		assertFalse(emptyTree.remove(8192));
+		
+		try {
+			sampleTree.remove(null);
+			fail("Failed to throw exception when removing null");
+		} catch (NullPointerException e) {
+			// test passes!!
+		}
+	}
+	
+	public void removeAll() {
+		assertFalse(sampleTree.removeAll(listOfNumbers));
+		sampleTree.addAll(listOfNumbers);
+		assertTrue(sampleTree.removeAll(listOfNumbers));
+		
+		assertFalse(oneNodeTree.removeAll(listOfNumbers));
+		oneNodeTree.addAll(listOfNumbers);
+		assertTrue(oneNodeTree.removeAll(listOfNumbers));
+
+		assertFalse(emptyTree.removeAll(listOfNumbers));
+		emptyTree.addAll(listOfNumbers);
+		assertTrue(emptyTree.removeAll(listOfNumbers));
+		
+		listOfNumbers.add(1, null);
+		try {
+			oneNodeTree.removeAll(listOfNumbers);
+			fail("Failed to throw exception on null containsAll");
+		} catch (NullPointerException e) {
+			// test passes!!
+		}
+	}
+	
+	public void testSize() {
+		assertEquals(6,sampleTree.size());
+		assertEquals(1,oneNodeTree.size());
+		assertEquals(0,emptyTree.size());
+	}
+	
+	public void testToArrayList() {
+		List<Integer> sampleList = sampleTree.toArrayList();
+		assertEquals(6,sampleList.size());
+		assertEquals("[-1,2,3,4,5,7]",sampleList.toString());
+		
+		List<Integer> oneNodeList = oneNodeTree.toArrayList();
+		assertEquals(1,oneNodeList.size());
+		assertTrue(oneNodeList.contains(4));
+		
+		List<Integer> emptyList = emptyTree.toArrayList();
+		assertEquals(0,emptyList.size());
+	}
 }

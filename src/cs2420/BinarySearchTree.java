@@ -228,30 +228,30 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 
 	@Override
 	public boolean remove(Type item) {
-		if(item == null) {
-			throw new NullPointerException();
-		}
-		if (root == null) return false;
-		
-		Node<Type> currentNode = null;
-		Node<Type> nextNode = root;
-		while(nextNode != null) {
-			int comparisonData = item.compareTo(nextNode.data);
-			if (comparisonData == 0) {
-				//currentNode
-			} else if (comparisonData < 0) {
-				//check if null - false
-				// go left
-				nextNode = nextNode.left;
-			} else {
-				//check if null - false
-				// go right
-				nextNode = nextNode.right;
-			}
-			currentNode = nextNode;
-		}
-		
-		
+//		if(item == null) {
+//			throw new NullPointerException();
+//		}
+//		if (root == null) return false;
+//		
+//		Node<Type> currentNode = null;
+//		Node<Type> nextNode = root;
+//		while(nextNode != null) {
+//			int comparisonData = item.compareTo(nextNode.data);
+//			if (comparisonData == 0) {
+//				//currentNode
+//			} else if (comparisonData < 0) {
+//				//check if null - false
+//				// go left
+//				nextNode = nextNode.left;
+//			} else {
+//				//check if null - false
+//				// go right
+//				nextNode = nextNode.right;
+//			}
+//			currentNode = nextNode;
+//		}
+//		
+		return false;
 	}
 
 	@Override
@@ -270,11 +270,29 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 
 	@Override
 	public ArrayList<Type> toArrayList() {
-		BinarySearchTree temp = this;
-		ArrayList<Type> treeArrayList = new ArrayList<>();
-		//treeArrayList.add(temp.first());
-		temp.remove(first());
-		return null;
+		ArrayList<Type> arrayList = new ArrayList<>();
+		if(root == null) {
+			return arrayList;
+		}
+		return toArrayHelper(root, 0, arrayList);
+	}
+	
+	/**
+	 * 
+	 * @param root
+	 */
+	private ArrayList<Type> toArrayHelper(Node<Type> node, int index, ArrayList<Type> arrayList) {
+		arrayList.add(index, node.data);
+		
+		if(node.left != null) {
+			toArrayHelper(node.left, arrayList.indexOf(node.data), arrayList);
+		}
+		
+		if(node.right != null) {
+			toArrayHelper(node.right, arrayList.indexOf(node.data)+1, arrayList);
+		}
+		
+		return arrayList;
 	}
 
 }

@@ -288,7 +288,7 @@ public class BinarySearchTreeTest {
 	public void testToArrayList() {
 		List<Integer> sampleList = sampleTree.toArrayList();
 		assertEquals(6, sampleList.size());
-		assertEquals("[-1,2,3,4,5,7]", sampleList.toString());
+		assertEquals("[-1, 2, 3, 4, 5, 7]", sampleList.toString());
 
 		List<Integer> oneNodeList = oneNodeTree.toArrayList();
 		assertEquals(1, oneNodeList.size());

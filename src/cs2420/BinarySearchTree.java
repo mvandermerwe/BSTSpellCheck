@@ -89,7 +89,7 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 				return left.contains(item);
 			} else {
 				// Go right.
-				if (left == null)
+				if (right == null)
 					return false;
 				return right.contains(item);
 			}
@@ -116,6 +116,7 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 				// Go right.
 				if (right == null) {
 					right = new Node<Type>(item);
+					return;
 				}
 				right.insert(item);
 			}
@@ -140,6 +141,12 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		// item will be dereferenced in contains().
 		if (item == null) {
 			throw new NullPointerException();
+		}
+		
+		if(root == null) {
+			root = new Node<Type>(item);
+			size++;
+			return true;
 		}
 
 		if (root.contains(item)) {
@@ -180,6 +187,11 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		if (item == null) {
 			throw new NullPointerException();
 		}
+		
+		if(root == null) {
+			return false;
+		}
+		
 		return root.contains(item);
 	}
 

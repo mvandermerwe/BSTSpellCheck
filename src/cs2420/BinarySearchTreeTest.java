@@ -104,12 +104,12 @@ public class BinarySearchTreeTest {
 		assertEquals(7, sampleTree.size());
 
 		assertTrue(oneNodeTree.add(130));
-		assertTrue(sampleTree.contains(130));
-		assertEquals(2, sampleTree.size());
+		assertTrue(oneNodeTree.contains(130));
+		assertEquals(2, oneNodeTree.size());
 
 		assertTrue(emptyTree.add(1));
-		assertTrue(sampleTree.contains(1));
-		assertEquals(1, sampleTree.size());
+		assertTrue(emptyTree.contains(1));
+		assertEquals(1, emptyTree.size());
 
 		assertFalse(oneNodeTree.add(4));
 
@@ -135,7 +135,8 @@ public class BinarySearchTreeTest {
 		assertFalse(emptyTree.addAll(listOfNumbers));
 
 		// test for null
-		listOfNumbers.add(1, null);
+		Integer[] nulls = new Integer[] { 4, null };
+		listOfNumbers = Arrays.asList(nulls);
 		try {
 			oneNodeTree.addAll(listOfNumbers);
 			fail("Failed to throw exception on null addAll");
@@ -192,7 +193,9 @@ public class BinarySearchTreeTest {
 		emptyTree.addAll(listOfNumbers);
 		assertTrue(emptyTree.containsAll(listOfNumbers));
 
-		listOfNumbers.add(1, null);
+		// test for null
+		Integer[] nulls = new Integer[] { 4, null };
+		listOfNumbers = Arrays.asList(nulls);
 		try {
 			oneNodeTree.containsAll(listOfNumbers);
 			fail("Failed to throw exception on null containsAll");
@@ -217,7 +220,7 @@ public class BinarySearchTreeTest {
 	@Test
 	public void testLast() {
 		assertTrue(7 == sampleTree.last());
-		assertTrue(4 == sampleTree.last());
+		assertTrue(4 == oneNodeTree.last());
 
 		try {
 			emptyTree.last();

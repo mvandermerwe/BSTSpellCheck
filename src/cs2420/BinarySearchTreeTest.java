@@ -24,6 +24,10 @@ public class BinarySearchTreeTest {
 	BinarySearchTree<Integer> sampleTree;
 	BinarySearchTree<Integer> oneNodeTree;
 	BinarySearchTree<Integer> emptyTree;
+	
+	
+	BinarySearchTree<Integer> treeToRemoveRoot;
+	BinarySearchTree<Integer> treeToRemoveBranch;
 
 	List<Integer> listOfNumbers;
 
@@ -51,6 +55,23 @@ public class BinarySearchTreeTest {
 
 		Integer[] numbersToAdd = { 10, 20, 30 };
 		listOfNumbers = Arrays.asList(numbersToAdd);
+		
+		treeToRemoveRoot = new BinarySearchTree<>(100);
+		// add sample values on the left
+		treeToRemoveRoot.add(5); 
+		treeToRemoveRoot.add(3);
+		treeToRemoveRoot.add(7);		
+
+		treeToRemoveBranch = new BinarySearchTree<>(100);
+		// add sample values on the left
+		treeToRemoveBranch.add(5); 
+		treeToRemoveBranch.add(3);
+		treeToRemoveBranch.add(7);
+		// add values we will mess with on the right
+		treeToRemoveBranch.add(150);
+		treeToRemoveBranch.add(175);
+		treeToRemoveBranch.add(125);
+		
 
 	}
 
@@ -234,15 +255,43 @@ public class BinarySearchTreeTest {
 		assertTrue(emptyTree.isEmpty());
 	}
 
+	// ---------- REMOVE TESTS ----------
+	
+	/**
+	 * The getSuccessorParent method is used to
+	 * find the successor of 
+	 */
 	@Test
-	public void remove() {
+	public void testGetSuccessorParent() {
+		
+	}
+	
+	/**
+	 * Because of how many cases the remove method
+	 * has, it requires a better testing suite
+	 * than all of the other methods.
+	 * 
+	 * This first one tests the standard cases than
+	 * each other test does.
+	 * 
+	 * Most of these tests are based on the "successor"
+	 * We define the successor to be the least node
+	 * that is greater than N.
+	 * 
+	 * To remove, we find the successor, switch the 
+	 * value of the successor to the node to be removed,
+	 * and delete the successor.
+	 */
+	@Test
+	public void testRemoveBasic() {
 		assertTrue(sampleTree.remove(4));
 		assertFalse(sampleTree.contains(4));
 		assertFalse(sampleTree.remove(2048));
 
+		assertFalse(oneNodeTree.remove(4096));
 		assertTrue(oneNodeTree.remove(4));
 		assertTrue(oneNodeTree.isEmpty());
-		assertFalse(oneNodeTree.remove(4096));
+		
 
 		assertFalse(emptyTree.remove(8192));
 
@@ -253,9 +302,171 @@ public class BinarySearchTreeTest {
 			// test passes!!
 		}
 	}
-
+	
+	/** 
+	 * Tests removal of the root node, when there is a successor
+	 * which has no children, and is a child of the root node (the node to delete)
+	 */
 	@Test
-	public void removeAll() {
+	public void testRemoveRootSuccessorHasNoChildrenAndIsChildOfThisNode() {
+		treeToRemoveRoot.add(101);
+		
+		
+		assertTrue(treeToRemoveRoot.remove(100));
+		assertFalse(treeToRemoveRoot.contains(100));
+		assertTrue(101 == treeToRemoveRoot.root.data);
+	}
+	
+	/**
+	 * Tests removal of the root node, when there is a successor
+	 * which has no children and is not a child of the root node
+	 */
+	public void testRemoveRootSuccessorHasNoChildrenAndIsNotChildOfThisNode() {
+		treeToRemoveRoot.add(102);
+		treeToRemoveRoot.add(101);
+		treeToRemoveRoot.add(103);
+		
+		assertTrue(treeToRemoveRoot.remove(100));
+		assertFalse(treeToRemoveRoot.contains(100));
+		assertTrue(101 == treeToRemoveRoot.root.data);
+	}
+	
+	/**
+	 * Tests removal of the root node, when there is a successor
+	 * with a child, and the successor is the direct child of the
+	 * root node
+	 */
+	@Test
+	public void testRemoveRootSuccessorHasChildAndIsChildOfThisNode() {
+		treeToRemoveRoot.add(101);
+		treeToRemoveRoot.add(102);
+		
+		assertTrue(treeToRemoveRoot.remove(100));
+		assertFalse(treeToRemoveRoot.contains(100));
+		assertTrue(101 == treeToRemoveRoot.root.data);
+		assertTrue(102 == treeToRemoveRoot.root.right.data);
+	}
+	
+	/**
+	 * Tests removal of the root node, when there is a successor node,
+	 * the successor has a child (on the right), but is not a direct
+	 * child of the root node
+	 */
+	@Test
+	public void testRemoveRootSuccessorHasChildAndIsNotChildOfThisNode() {
+		treeToRemoveRoot.add(105);
+		treeToRemoveRoot.add(101);
+		treeToRemoveRoot.add(104);
+		
+		assertTrue(treeToRemoveRoot.remove(100));
+		assertFalse(treeToRemoveRoot.contains(100));
+		assertTrue(101 == treeToRemoveRoot.root.data);
+		assertTrue(105 == treeToRemoveRoot.root.right.data);
+		assertTrue(104 == treeToRemoveRoot.root.right.left.data);
+	}
+	
+	/**
+	 * Test removing the root when it is the largest node int the set
+	 * i.e. the successor of the root is the same as the root
+	 */
+	@Test
+	public void testRemoveRootNoSuccessor() {
+		assertTrue(treeToRemoveRoot.remove(100));
+		assertFalse(treeToRemoveRoot.contains(100));
+		assertTrue(5 == treeToRemoveRoot.root.data);
+	}
+	
+	/**
+	 * Test removing a leaf with no children from the tree
+	 */
+	@Test
+	public void testRemoveLeaf() {
+		assertTrue(treeToRemoveRoot.remove(3));
+		assertFalse(treeToRemoveRoot.contains(3));
+
+		assertTrue(treeToRemoveRoot.remove(7));
+		assertFalse(treeToRemoveRoot.contains(3));
+
+		assertEquals(2, treeToRemoveRoot.root.height());
+	}
+	
+	/**
+	 * Tests removal of a non-root node when the node to be deleted
+	 * has a successor with no children, and the successor is a child
+	 * of the node to be deleted
+	 */
+	@Test
+	public void testRemoveBranchSuccessorHasNoChildrenAndIsChildOfThisNode() {
+		
+		assertTrue(treeToRemoveBranch.remove(150));
+		assertFalse(treeToRemoveBranch.contains(150));
+		assertTrue(treeToRemoveBranch.contains(125));
+		assertTrue(treeToRemoveBranch.contains(175));
+
+	}
+	
+	/**
+	 * Tests the removal of a non-root node when this node to be deleted
+	 * has a successor with no children, and the successor is not a child
+	 * of this node.
+	 */
+	@Test
+	public void testRemoveBranchSuccessorHasNoChildrenAndIsNotChildOfThisNode() {
+		
+		treeToRemoveBranch.add(170);
+		
+		assertTrue(treeToRemoveBranch.remove(150));
+		assertFalse(treeToRemoveBranch.contains(150));
+		assertTrue(treeToRemoveBranch.contains(170));
+		assertTrue(treeToRemoveBranch.contains(125));
+	}
+	
+	/**
+	 * Tests the removal of a non-root node when it there is a successor,
+	 * the successor has a child (on the right), and the successor is
+	 * a child of the node to be deleted
+	 */
+	@Test
+	public void testRemoveBranchSuccessorHasChildAndIsChildOfThisNode() {
+		treeToRemoveBranch.add(190);
+		
+		assertTrue(treeToRemoveBranch.remove(150));
+		assertFalse(treeToRemoveBranch.contains(150));
+		assertTrue(treeToRemoveBranch.contains(190));
+		assertTrue(treeToRemoveBranch.contains(125));
+
+	}
+	
+	/**
+	 * Tests the removal of a non-root node when it has a successor, the 
+	 * successor has a child, and the successor is not a child of the node to be deleted
+	 */
+	@Test
+	public void testRemoveBranchSuccessorHasChildAndIsNotChildOfThisNode() {
+		treeToRemoveBranch.add(170);
+		treeToRemoveBranch.add(171);
+		
+		assertTrue(treeToRemoveBranch.remove(150));
+		assertFalse(treeToRemoveBranch.contains(150));
+		assertTrue(treeToRemoveBranch.contains(170));
+		assertTrue(treeToRemoveBranch.contains(171));
+		assertTrue(treeToRemoveBranch.contains(125));
+	}
+	
+	@Test
+	public void testRemoveBranchNoSuccessor() {
+		treeToRemoveBranch.add(170);
+		
+		assertTrue(treeToRemoveBranch.remove(175));
+		assertFalse(treeToRemoveBranch.contains(175));
+		assertTrue(treeToRemoveBranch.contains(170));
+		
+	}
+	
+	// -------- END TESTS FOR REMOVE METHOD --------
+	
+	@Test
+	public void testRemoveAll() {
 		assertFalse(sampleTree.removeAll(listOfNumbers));
 		sampleTree.addAll(listOfNumbers);
 		assertTrue(sampleTree.removeAll(listOfNumbers));

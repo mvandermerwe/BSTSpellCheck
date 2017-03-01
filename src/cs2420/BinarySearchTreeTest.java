@@ -486,7 +486,8 @@ public class BinarySearchTreeTest {
 		emptyTree.addAll(listOfNumbers);
 		assertTrue(emptyTree.removeAll(listOfNumbers));
 
-		listOfNumbers.add(null);
+		Integer[] nulls = new Integer[] { 4, null };
+		listOfNumbers = Arrays.asList(nulls);
 		try {
 			oneNodeTree.removeAll(listOfNumbers);
 			fail("Failed to throw exception on null containsAll");

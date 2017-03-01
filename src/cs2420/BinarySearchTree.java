@@ -3,8 +3,11 @@
  */
 package cs2420;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 
 /**
@@ -239,6 +242,8 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		if (items == null) {
 			throw new NullPointerException();
 		}
+		
+		//Collections.shuffle(items);
 
 		// Collections.shuffle(items); -> We gon shuffle her
 		boolean isChanged = false;
@@ -456,6 +461,43 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		}
 		
 		return arrayList;
+	}
+	
+	public void writeDotHelper(StringBuilder builder, Node<Type> node) {
+		
+		String leftStr = node.left == null ? "null" : node.left.data.toString();
+		String rightStr = node.right == null ? "null" : node.right.data.toString();
+		builder.append("\t" 
+					   + node.data 
+					   + " -> { " 
+					   + leftStr 
+					   + ", " 
+					   + rightStr 
+					   + " };\n");
+		writeDotHelper(builder,node.left);
+		writeDotHelper(builder,node.right);
+	}
+	
+	public void writeDot(String filename) {
+		
+		
+		StringBuilder dotFile = new StringBuilder();
+		
+		dotFile.append("digraph\n");
+		dotFile.append("{\n");
+		writeDotHelper(dotFile,root);
+		dotFile.append("\tnull [shape=point];\n");
+		dotFile.append("}\n");
+		
+		try {
+			FileWriter csvWriter = new FileWriter(filename + ".dot");
+			csvWriter.write(dotFile.toString());
+			csvWriter.close();
+		} catch (IOException e) {
+			System.out.println("Unable to write dot file.");
+		}
+
+		
 	}
 
 }

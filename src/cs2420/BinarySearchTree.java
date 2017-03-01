@@ -465,8 +465,16 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 	
 	public void writeDotHelper(StringBuilder builder, Node<Type> node) {
 		
-		String leftStr = node.left == null ? "null" : node.left.data.toString();
-		String rightStr = node.right == null ? "null" : node.right.data.toString();
+		if (node == null) {
+			return;
+		}
+		String nodeDataString = node.data.toString();
+		if (nodeDataString.contains("-")) {
+			
+			nodeDataString = nodeDataString.replace('-', 'n');
+		}
+		String leftStr = node.left == null ? "null" + nodeDataString + "L" : node.left.data.toString();
+		String rightStr = node.right == null ? "null" + nodeDataString + "R" : node.right.data.toString();
 		builder.append("\t" 
 					   + node.data 
 					   + " -> { " 
@@ -485,8 +493,12 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		
 		dotFile.append("digraph\n");
 		dotFile.append("{\n");
-		writeDotHelper(dotFile,root);
-		dotFile.append("\tnull [shape=point];\n");
+		if (root == null) {
+			dotFile.append("\tnull;");
+		} else {
+			writeDotHelper(dotFile,root);
+		}
+		
 		dotFile.append("}\n");
 		
 		try {

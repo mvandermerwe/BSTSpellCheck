@@ -496,6 +496,9 @@ public class BinarySearchTreeTest {
 		}
 	}
 
+	/**
+	 * Tests getting the size of a binary tree
+	 */
 	@Test
 	public void testSize() {
 		assertEquals(6, sampleTree.size());
@@ -503,6 +506,9 @@ public class BinarySearchTreeTest {
 		assertEquals(0, emptyTree.size());
 	}
 
+	/**
+	 * Tests recursive conversion to an array list of a binary tree
+	 */
 	@Test
 	public void testToArrayList() {
 		List<Integer> sampleList = sampleTree.toArrayList();
@@ -515,5 +521,20 @@ public class BinarySearchTreeTest {
 
 		List<Integer> emptyList = emptyTree.toArrayList();
 		assertEquals(0, emptyList.size());
+	}
+	/**
+	 * Tests writing to a dot file
+	 * 
+	 * THIS TEST ALWAYS PASSES
+	 * 
+	 * To check the dot file, manually open it with graphviz
+	 */
+	@Test
+	public void testDotFile() {
+		sampleTree.writeDot("sampleDot");
+		oneNodeTree.writeDot("oneNodeDot");
+		emptyTree.writeDot("emptyDot");
+		treeToRemoveRoot.writeDot("removeRootDot");
+		treeToRemoveBranch.writeDot("removeBranchDot");
 	}
 }

@@ -1,4 +1,4 @@
-package assignment08;
+package cs2420;
 
 import java.io.File;
 import java.util.List;

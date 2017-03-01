@@ -4,16 +4,17 @@
 package cs2420;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
  * @author jjgarzella
  *
+ * The binary search tree class is a Binary Search Tree
+ * implementation of a Sorted Set. There are no duplicates allowed, 
+ * and when an element is added or removed, boolean information 
+ * about whether the set changed is returned. 
+ * 
  */
 public class BinarySearchTree<Type extends Comparable<? super Type>> implements SortedSet<Type> {
 
@@ -121,6 +122,80 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 				right.insert(item);
 			}
 
+		}
+		
+		boolean remove(Type item, Node<Type> parent, boolean nodeIsLeftOfParent) {
+			
+			
+			int comparison = item.compareTo(data);
+			if (comparison < 0) {
+				// Go left
+				if (left == null)  return false;
+				
+				return left.remove(item, this, true);
+			}
+			else if (0 < comparison) {
+				if (right == null) return false;
+				
+				return right.remove(item, this, false);
+			}
+			
+			else {
+				// case 1: this has no children
+				if (left == null && right == null) {
+					if (nodeIsLeftOfParent) {
+						parent.left = null;
+					} else {
+						parent.right = null;
+					}
+					return true;
+				}
+				
+				// case 2: this node has one child
+				Node<Type> singleChild;
+				if (right != null && left == null) {
+					singleChild = right;
+				} else if (right == null && left != null) {
+					singleChild = left;
+				} else { // two children, we will skip next code
+					singleChild = null;
+				}
+				
+				if (singleChild != null) {
+					if (nodeIsLeftOfParent) {
+						parent.left = singleChild;
+					} else {
+						parent.right = singleChild;
+					}
+					return true;
+				}
+				
+				// case 3: this node has more than one child
+				
+				// in this case, get the 'successor' from the
+				// right side
+				Node<Type> successor = right;
+				while(successor.left != null) {
+					successor = successor.left;
+				}
+				
+				data = successor.data;
+				// The tree is no longer a [unique] binary tree, temporarily.
+				// Yet this.right IS a binary tree. 
+				// Also, the successor is guarenteed to have one or less children
+				// So, to solve the problem we just remove it normally.
+				boolean removeResult = right.remove(successor.data, this, false);
+				
+				// gut check, could maybe be an assert statement?
+				if (!removeResult) {
+					System.out.println("Error: the successor node was not found on the right, \n"
+										+ "       though it should be guarenteed to be in the tree");
+				}
+				
+				return true;
+			}
+
+			
 		}
 
 	}
@@ -261,64 +336,85 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 	public boolean remove(Type item) {
 		
 		
-		if(item == null) {
+		if (item == null) {
 			throw new NullPointerException();
 		}
 		if (root == null) return false;
 		
-		Node<Type> parentNode = null;
-		Node<Type> currentNode = root;
+		Node<Type> dummyNode = new Node<>(null);
+		dummyNode.left = root;
+		boolean treeWasChanged = root.remove(item, dummyNode, true);
 		
-		while(currentNode != null) {
-			int comparisonData = item.compareTo(currentNode.data);
-			if (comparisonData == 0) {
-				//currentNode
-				
-				// this is the node to delete
-				
-				// case 1: successor is equal to this node
-				// test this explicitly
-				if (currentNode.right == null) {
-					
-					if (parentNode != null) {
-						parentNode.left = currentNode;
-					} else {
-						root = currentNode; // or root = root.left
-					}
-				}
-				
-				// get the successor node
-				Node<Type> successorParent = getSuccessorParent(currentNode);
-				Node<Type> successor;
-				// either the successor has no children or it has one child on the right
-				if (currentNode == successorParent) {
-					successor = successorParent.right;
-					currentNode.data = successor.data;
-					successorParent.right = successor.right;
-				}else {
-					successor = successorParent.left;
-					currentNode.data = successor.data;
-					successorParent.left = successor.right;
-				}
-					
-				// we have removed this node, we are done
-				break;
-				
-			} else if (comparisonData < 0) {
-				if (currentNode.left == null) return false;
-				// go left
-				parentNode = currentNode;
-				currentNode = currentNode.left;
-			} else {
-				if (currentNode.right == null) return false;
-				// go right
-				parentNode = currentNode;
-				currentNode = currentNode.right;
-			}
-			
-		}
+		// this won't change anything unless 
+		// 1) root was deleted AND
+		// 2) root had 0 or 1 children
+		root = dummyNode.left; 
 		
-		return false;
+		return treeWasChanged;
+		
+//		Node<Type> parentNode = null;
+//		Node<Type> currentNode = root;
+//		boolean isChildLeftOfParentNode = false; // garbage value to start
+//		
+//		while(currentNode != null) {
+//			int comparisonData = item.compareTo(currentNode.data);
+//			if (comparisonData == 0) {
+//				//currentNode
+//				
+//				// currentNode is the node to delete
+//				
+//				// case 1: successor is equal to this node
+//				// test this explicitly
+//				if (currentNode.right == null) {
+//					
+//					if (parentNode != null) {
+//						if (isChildLeftOfParentNode) {
+//							parentNode.left = currentNode.left;
+//						} else {
+//							parentNode.right = currentNode.right;
+//						}
+//						
+//					} else {
+//						root = currentNode.left; // or root = root.left
+//					}
+//
+//				} else {
+//				
+//					// get the successor node
+//					Node<Type> successorParent = getSuccessorParent(currentNode);
+//					Node<Type> successor;
+//					// either the successor has no children or it has one child on the right
+//					if (currentNode == successorParent) {
+//						successor = successorParent.right;
+//						currentNode.data = successor.data;
+//						successorParent.right = successor.right;
+//					} else {
+//						successor = successorParent.left;
+//						currentNode.data = successor.data;
+//						successorParent.left = successor.right;
+//					}
+//					
+//				} 
+//				// we have removed this node, we are done
+//				return true;
+//				
+//			} else if (comparisonData < 0) {
+//				if (currentNode.left == null) return false;
+//				// go left
+//				parentNode = currentNode;
+//				currentNode = currentNode.left;
+//				isChildLeftOfParentNode = true;
+//			} else {
+//				if (currentNode.right == null) return false;
+//				// go right
+//				parentNode = currentNode;
+//				currentNode = currentNode.right;
+//				isChildLeftOfParentNode = false;
+//			}
+//			
+//		}
+//		
+//		return false;
 	}
 
 	@Override

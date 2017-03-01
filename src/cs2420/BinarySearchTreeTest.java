@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Arrays;
 
-import org.junit.After;
+//import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -266,7 +266,11 @@ public class BinarySearchTreeTest {
 	 */
 	@Test
 	public void testGetSuccessorParent() {
-		
+		treeToRemoveBranch.add(170);
+
+		BinarySearchTree.Node<Integer> oneHundredFifty = treeToRemoveBranch.root.right;
+		BinarySearchTree.Node<Integer> successorParent = treeToRemoveBranch.getSuccessorParent(oneHundredFifty);
+		assertTrue(175 == successorParent.data);
 	}
 	
 	/**
@@ -374,7 +378,7 @@ public class BinarySearchTreeTest {
 	 */
 	@Test
 	public void testRemoveRootNoSuccessor() {
-		assertTrue(treeToRemoveRoot.remove(100));
+		treeToRemoveRoot.remove(100);
 		assertFalse(treeToRemoveRoot.contains(100));
 		assertTrue(5 == treeToRemoveRoot.root.data);
 	}
@@ -482,7 +486,7 @@ public class BinarySearchTreeTest {
 		emptyTree.addAll(listOfNumbers);
 		assertTrue(emptyTree.removeAll(listOfNumbers));
 
-		listOfNumbers.add(1, null);
+		listOfNumbers.add(null);
 		try {
 			oneNodeTree.removeAll(listOfNumbers);
 			fail("Failed to throw exception on null containsAll");

@@ -132,7 +132,7 @@ public class Timing {
 	 * @return time (in nanoseconds) for the numbers to be added.
 	 */
 	public static long insertRandom(BinarySearchTree<Integer> binarySearchTree, int N) {
-		int sum = 0;
+		long sum = 0;
 
 		for (int num = 0; num < N; num++) {
 			int numberToInsert = generator.nextInt(N);
@@ -160,7 +160,7 @@ public class Timing {
 	 * @return time (in nanoseconds) for the numbers to be searched for.
 	 */
 	public static long contains(BinarySearchTree<Integer> binarySearchTree, int N) {
-		int sum = 0;
+		long sum = 0;
 
 		for (int num = 0; num < 100; num++) {
 			int numberToFind = generator.nextInt(N);
@@ -172,7 +172,7 @@ public class Timing {
 			sum += (endTime - startTime);
 		}
 
-		return sum / (long) 100.;
+		return sum / 100;
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class Timing {
 	 * @return time (in nanoseconds) for the numbers to be added.
 	 */
 	public static long testTreeSetRandom(TreeSet<Integer> treeSet, int N) {
-		int sum = 0;
+		long sum = 0;
 
 		for (int num = 0; num < N; num++) {
 			int numberToInsert = generator.nextInt(N);
@@ -234,7 +234,7 @@ public class Timing {
 	 * @return time (in nanoseconds) for the numbers to be searched for.
 	 */
 	public static long contains(TreeSet<Integer> treeSet, int N) {
-		int sum = 0;
+		long sum = 0;
 
 		for (int num = 0; num < 100; num++) {
 			int numberToFind = generator.nextInt(N);

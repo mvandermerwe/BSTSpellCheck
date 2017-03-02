@@ -200,6 +200,30 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 
 			
 		}
+		
+		public void writeDotHelper(StringBuilder builder) {
+			String nodeDataString = this.data.toString();
+			if (nodeDataString.contains("-")) {
+				
+				nodeDataString = nodeDataString.replace('-', 'n');
+			}
+			String leftStr = this.left == null ? "null" + nodeDataString + "L" : this.left.data.toString();
+			String rightStr = this.right == null ? "null" + nodeDataString + "R" : this.right.data.toString();
+			builder.append("\t" 
+						   + this.data 
+						   + " -> { " 
+						   + leftStr 
+						   + ", " 
+						   + rightStr 
+						   + " };\n");
+			if(this.left != null) {
+				this.left.writeDotHelper(builder);
+			}
+			
+			if(this.right != null) {
+				this.right.writeDotHelper(builder);
+			}
+		}
 
 	}
 
@@ -463,29 +487,6 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		return arrayList;
 	}
 	
-	public void writeDotHelper(StringBuilder builder, Node<Type> node) {
-		
-		if (node == null) {
-			return;
-		}
-		String nodeDataString = node.data.toString();
-		if (nodeDataString.contains("-")) {
-			
-			nodeDataString = nodeDataString.replace('-', 'n');
-		}
-		String leftStr = node.left == null ? "null" + nodeDataString + "L" : node.left.data.toString();
-		String rightStr = node.right == null ? "null" + nodeDataString + "R" : node.right.data.toString();
-		builder.append("\t" 
-					   + node.data 
-					   + " -> { " 
-					   + leftStr 
-					   + ", " 
-					   + rightStr 
-					   + " };\n");
-		writeDotHelper(builder,node.left);
-		writeDotHelper(builder,node.right);
-	}
-	
 	public void writeDot(String filename) {
 		
 		
@@ -496,7 +497,7 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		if (root == null) {
 			dotFile.append("\tnull;");
 		} else {
-			writeDotHelper(dotFile,root);
+			root.writeDotHelper(dotFile);
 		}
 		
 		dotFile.append("}\n");

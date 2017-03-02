@@ -17,8 +17,8 @@ public class Timing {
 	// Gives us random integers to use during testing.
 	static Random generator = new Random();
 
-	static int bigN = 10000;
-	static int incrementN = 1000;
+	static int bigN = 20000;
+	static int incrementN = 500;
 
 	public static void main(String[] args) {
 		/*
@@ -67,7 +67,7 @@ public class Timing {
 		TreeSet<Integer> inOrderTreeSet = new TreeSet<>();
 		TreeSet<Integer> randomTreeSet = new TreeSet<>();
 
-		// Run in order adding test.
+		// Run in order adding test for TreeSet.
 		addData = new StringBuilder();
 		containsData = new StringBuilder();
 		for (int n = 1; n < bigN; n += incrementN) {
@@ -83,7 +83,7 @@ public class Timing {
 		sendToFile(addData, "inOrderAddTreeSet.csv");
 		sendToFile(containsData, "inOrderContainsTreeSet.csv");
 
-		// Run in order adding test.
+		// Run random order adding test for TreeSet.
 		addData = new StringBuilder();
 		containsData = new StringBuilder();
 		for (int n = 1; n < bigN; n += incrementN) {
@@ -118,7 +118,7 @@ public class Timing {
 		}
 		long endTime = System.nanoTime();
 
-		return (endTime - startTime);
+		return (endTime - startTime) / N;
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class Timing {
 			sum += (endTime - startTime);
 		}
 
-		return sum;
+		return sum / N;
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class Timing {
 	public static long contains(BinarySearchTree<Integer> binarySearchTree, int N) {
 		long sum = 0;
 
-		for (int num = 0; num < 100; num++) {
+		for (int num = 0; num < 1000; num++) {
 			int numberToFind = generator.nextInt(N);
 
 			long startTime = System.nanoTime();
@@ -198,7 +198,7 @@ public class Timing {
 			sum += (endTime - startTime);
 		}
 
-		return sum;
+		return sum / N;
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class Timing {
 		}
 		long endTime = System.nanoTime();
 
-		return (endTime - startTime);
+		return (endTime - startTime) / N;
 	}
 	
 	/**
@@ -236,7 +236,7 @@ public class Timing {
 	public static long contains(TreeSet<Integer> treeSet, int N) {
 		long sum = 0;
 
-		for (int num = 0; num < 100; num++) {
+		for (int num = 0; num < 1000; num++) {
 			int numberToFind = generator.nextInt(N);
 
 			long startTime = System.nanoTime();
@@ -246,7 +246,7 @@ public class Timing {
 			sum += (endTime - startTime);
 		}
 
-		return sum / (long) 100.;
+		return sum / (long) 100;
 	}
 
 	private static void sendToFile(StringBuilder fileData, String filename) {

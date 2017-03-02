@@ -172,7 +172,7 @@ public class Timing {
 			sum += (endTime - startTime);
 		}
 
-		return sum / 100;
+		return sum / 1000;
 	}
 
 	/**
@@ -246,7 +246,7 @@ public class Timing {
 			sum += (endTime - startTime);
 		}
 
-		return sum / (long) 100;
+		return sum / (long) 1000;
 	}
 
 	private static void sendToFile(StringBuilder fileData, String filename) {

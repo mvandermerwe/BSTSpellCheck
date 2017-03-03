@@ -261,19 +261,6 @@ public class BinarySearchTreeTest {
 	// ---------- REMOVE TESTS ----------
 	
 	/**
-	 * The getSuccessorParent method is used to
-	 * find the successor of 
-	 */
-	@Test
-	public void testGetSuccessorParent() {
-		treeToRemoveBranch.add(170);
-
-		BinarySearchTree.Node<Integer> oneHundredFifty = treeToRemoveBranch.root.right;
-		BinarySearchTree.Node<Integer> successorParent = treeToRemoveBranch.getSuccessorParent(oneHundredFifty);
-		assertTrue(175 == successorParent.data);
-	}
-	
-	/**
 	 * Because of how many cases the remove method
 	 * has, it requires a better testing suite
 	 * than all of the other methods.

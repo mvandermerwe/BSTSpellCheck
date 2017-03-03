@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.NoSuchElementException;
 
 /**
@@ -127,6 +126,19 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 
 		}
 		
+		/**
+		 * Remove the value "item" from this node.
+		 * 
+		 * This is not technically recursive, 
+		 * (we call left.remove() and right.remove()), it 
+		 * gets it's recursiveness from the fact that 
+		 * Node is a recursively defined type.
+		 * 
+		 * @param item
+		 * @param parent
+		 * @param nodeIsLeftOfParent
+		 * @return
+		 */
 		boolean remove(Type item, Node<Type> parent, boolean nodeIsLeftOfParent) {
 			
 			
@@ -201,27 +213,33 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 			
 		}
 		
+		/**
+		 * recursive helper method for writing node data
+		 * in the dot format
+		 * 
+		 * @param builder a StringBuilder that to which the data will be written
+		 */
 		public void writeDotHelper(StringBuilder builder) {
 			String nodeDataString = this.data.toString();
 			if (nodeDataString.contains("-")) {
 				
 				nodeDataString = nodeDataString.replace('-', 'n');
 			}
-			String leftStr = this.left == null ? "null" + nodeDataString + "L" : this.left.data.toString();
-			String rightStr = this.right == null ? "null" + nodeDataString + "R" : this.right.data.toString();
+			String leftStr = left == null ? "null" + nodeDataString + "L" : left.data.toString();
+			String rightStr = right == null ? "null" + nodeDataString + "R" : right.data.toString();
 			builder.append("\t" 
-						   + this.data 
+						   + data 
 						   + " -> { " 
 						   + leftStr 
 						   + ", " 
 						   + rightStr 
 						   + " };\n");
-			if(this.left != null) {
-				this.left.writeDotHelper(builder);
+			if(left != null) {
+				left.writeDotHelper(builder);
 			}
 			
 			if(this.right != null) {
-				this.right.writeDotHelper(builder);
+				right.writeDotHelper(builder);
 			}
 		}
 
@@ -260,6 +278,9 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		}
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public boolean addAll(Collection<? extends Type> items) {
 		// Technically don't have to - for clarity.
@@ -267,9 +288,8 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 			throw new NullPointerException();
 		}
 		
-		//Collections.shuffle(items);
-
-		// Collections.shuffle(items); -> We gon shuffle her
+		// We would like to shuffle the array here 
+		
 		boolean isChanged = false;
 		for (Type item : items) {
 			if (add(item))

@@ -17,8 +17,11 @@ public class Timing {
 	// Gives us random integers to use during testing.
 	static Random generator = new Random();
 
-	static int bigN = 20000;
+	static int bigN = 10000;
 	static int incrementN = 500;
+
+	static int testNum = 100000;
+	static int smallTestNum = 50;
 
 	public static void main(String[] args) {
 		/*
@@ -111,14 +114,21 @@ public class Timing {
 	 * @return time (in nanoseconds) for the numbers to be added.
 	 */
 	public static long insertInOrder(BinarySearchTree<Integer> binarySearchTree, int N) {
+		long sum = 0;
 
-		long startTime = System.nanoTime();
-		for (int num = 0; num < N; num++) {
-			binarySearchTree.add(num);
+		for (int numTest = 0; numTest < smallTestNum; numTest++) {
+			binarySearchTree.clear();
+			long startTime = System.nanoTime();
+			for (int num = 0; num < N; num++) {
+				binarySearchTree.add(num);
+			}
+			long endTime = System.nanoTime();
+			
+			sum += (endTime - startTime);
 		}
-		long endTime = System.nanoTime();
+		
 
-		return (endTime - startTime) / N;
+		return sum / (N*smallTestNum);
 	}
 
 	/**
@@ -134,23 +144,25 @@ public class Timing {
 	public static long insertRandom(BinarySearchTree<Integer> binarySearchTree, int N) {
 		long sum = 0;
 
-		for (int num = 0; num < N; num++) {
-			int numberToInsert = generator.nextInt(N);
+		for (int numTest = 0; numTest < smallTestNum; numTest++) {
+			binarySearchTree.clear();
+			for (int num = 0; num < N; num++) {
+				int numberToInsert = generator.nextInt(N);
 
-			long startTime = System.nanoTime();
-			binarySearchTree.add(numberToInsert);
-			long endTime = System.nanoTime();
+				long startTime = System.nanoTime();
+				binarySearchTree.add(numberToInsert);
+				long endTime = System.nanoTime();
 
-			sum += (endTime - startTime);
+				sum += (endTime - startTime);
+			}
 		}
 
-		return sum / N;
+		return sum / (N * smallTestNum);
 	}
 
 	/**
 	 * Test the contains performance of our BinarySearchTree by seeing how long
-	 * it takes the binary tree to find a random element between 0 and
-	 * N.
+	 * it takes the binary tree to find a random element between 0 and N.
 	 * 
 	 * @param binarySearchTree
 	 *            - tree to search on.
@@ -162,7 +174,7 @@ public class Timing {
 	public static long contains(BinarySearchTree<Integer> binarySearchTree, int N) {
 		long sum = 0;
 
-		for (int num = 0; num < 1000; num++) {
+		for (int num = 0; num < testNum; num++) {
 			int numberToFind = generator.nextInt(N);
 
 			long startTime = System.nanoTime();
@@ -172,7 +184,7 @@ public class Timing {
 			sum += (endTime - startTime);
 		}
 
-		return sum / 1000;
+		return sum / testNum;
 	}
 
 	/**
@@ -188,17 +200,20 @@ public class Timing {
 	public static long testTreeSetRandom(TreeSet<Integer> treeSet, int N) {
 		long sum = 0;
 
-		for (int num = 0; num < N; num++) {
-			int numberToInsert = generator.nextInt(N);
+		for (int numTest = 0; numTest < smallTestNum; numTest++) {
+			treeSet.clear();
+			for (int num = 0; num < N; num++) {
+				int numberToInsert = generator.nextInt(N);
 
-			long startTime = System.nanoTime();
-			treeSet.add(numberToInsert);
-			long endTime = System.nanoTime();
+				long startTime = System.nanoTime();
+				treeSet.add(numberToInsert);
+				long endTime = System.nanoTime();
 
-			sum += (endTime - startTime);
+				sum += (endTime - startTime);
+			}
 		}
 
-		return sum / N;
+		return sum / (N * smallTestNum);
 	}
 
 	/**
@@ -212,19 +227,25 @@ public class Timing {
 	 * @return time (in nanoseconds) for the numbers to be added.
 	 */
 	public static long testTreeSetInOrder(TreeSet<Integer> treeSet, int N) {
-		long startTime = System.nanoTime();
-		for (int num = 0; num < N; num++) {
-			treeSet.add(num);
-		}
-		long endTime = System.nanoTime();
+		long sum = 0;
 
-		return (endTime - startTime) / N;
+		for (int numTest = 0; numTest < smallTestNum; numTest++) {
+			long startTime = System.nanoTime();
+			for (int num = 0; num < N; num++) {
+				treeSet.add(num);
+			}
+			long endTime = System.nanoTime();
+			
+			sum += (endTime - startTime);
+		}
+
+		
+		return sum / (N * smallTestNum);
 	}
-	
+
 	/**
-	 * Test the contains performance of Java's TreeSet by seeing how long
-	 * it takes the binary tree to find a random element between 0 and
-	 * N.
+	 * Test the contains performance of Java's TreeSet by seeing how long it
+	 * takes the binary tree to find a random element between 0 and N.
 	 * 
 	 * @param binarySearchTree
 	 *            - tree to search on.
@@ -236,7 +257,7 @@ public class Timing {
 	public static long contains(TreeSet<Integer> treeSet, int N) {
 		long sum = 0;
 
-		for (int num = 0; num < 1000; num++) {
+		for (int num = 0; num < testNum; num++) {
 			int numberToFind = generator.nextInt(N);
 
 			long startTime = System.nanoTime();
@@ -246,7 +267,7 @@ public class Timing {
 			sum += (endTime - startTime);
 		}
 
-		return sum / (long) 1000;
+		return sum / (long) testNum;
 	}
 
 	private static void sendToFile(StringBuilder fileData, String filename) {

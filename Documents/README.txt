@@ -27,4 +27,7 @@ right.
 4. We think we have the best set of tests for the remove() method. As this
 might have been our most complicated, and the one we struggled with, we
 wrote a bunch of tests. They are marked off with comments in the test case.
+5. In many places, we explicitly throw a NullPointerException by design,
+for clarity purposes. We could just wait for the pointer to be dereferenced,
+but this is clearere. In a language like C, we would have to check.
 

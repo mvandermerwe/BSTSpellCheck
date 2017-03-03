@@ -20,7 +20,13 @@ import java.util.NoSuchElementException;
  */
 public class BinarySearchTree<Type extends Comparable<? super Type>> implements SortedSet<Type> {
 
+	/**
+	 * The root element of the tree, protected for unit tests.
+	 */
 	protected Node<Type> root;
+	/**
+	 * The size of the tree, manually computed as elements or added
+	 */
 	private int size = 0;
 
 	/**
@@ -123,6 +129,8 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 				}
 				right.insert(item);
 			}
+			
+
 
 		}
 		
@@ -134,9 +142,9 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		 * gets it's recursiveness from the fact that 
 		 * Node is a recursively defined type.
 		 * 
-		 * @param item
-		 * @param parent
-		 * @param nodeIsLeftOfParent
+		 * @param item the item to delete
+		 * @param parent must be the parent node of this
+		 * @param nodeIsLeftOfParent 
 		 * @return
 		 */
 		boolean remove(Type item, Node<Type> parent, boolean nodeIsLeftOfParent) {
@@ -243,18 +251,55 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 			}
 		}
 
+		
+		/**
+		 * helper method for the toArray() function
+		 * 
+		 * Traverses the tree.
+		 * 
+		 * Note that this method computes and index to insert
+		 * the next node at, rather than adding elements in between.
+		 * 
+		 * @param root
+		 */
+		private ArrayList<Type> toArrayHelper(int index, ArrayList<Type> arrayList) {
+			arrayList.add(index, data);
+
+			if(left != null) {
+				left.toArrayHelper(arrayList.indexOf(data), arrayList);
+			}
+
+			if(right != null) {
+				right.toArrayHelper(arrayList.indexOf(data)+1, arrayList);
+			}
+			
+			return arrayList;
+		}
+
 	}
 
+	
+	/**
+	 * Creates a BinarySearchTree, putting in the root as item
+	 * 
+	 * @param item the root of the tree
+	 */
 	public BinarySearchTree(Type item) {
 		root = new Node<>(item);
 		size = 1;
 	}
 
+	/**
+	 * Creates an empty tree
+	 */
 	public BinarySearchTree() {
 		// The defaults of the properties are already in proper
 		// state for an empty tree
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean add(Type item) {
 		// Technically don't have to - for clarity.
@@ -279,7 +324,11 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 	}
 
 	/**
+	 * The collection items will not be automatically shuffled,
+	 * as Java will not allow use of generic methods on a 
+	 * wildcard type, preventing us from using Collections.shuffle
 	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean addAll(Collection<? extends Type> items) {
@@ -298,6 +347,9 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		return isChanged;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void clear() {
 		root = null;
@@ -305,6 +357,9 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		// Let garbage be collected.
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean contains(Type item) {
 		// Technically don't have to do this but clarity is nice.
@@ -319,6 +374,9 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		return root.contains(item);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean containsAll(Collection<? extends Type> items) {
 		for(Type item: items) {
@@ -327,6 +385,9 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Type first() throws NoSuchElementException {
 		if(root == null) {
@@ -342,11 +403,17 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		return currentNode.data;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isEmpty() {
 		return root == null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Type last() throws NoSuchElementException {
 		if(root == null) {
@@ -362,6 +429,13 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		return currentNode.data;
 	}
 
+	/**
+	 * Makes use of the helper method in the node class
+	 * 
+	 * Uses a dummy node to allow the root to be removed
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean remove(Type item) {
 		
@@ -383,6 +457,9 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		return treeWasChanged;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean removeAll(Collection<? extends Type> items) {
 		boolean isChanged = false;
@@ -392,38 +469,31 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 		return isChanged;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int size() {
 		return size;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ArrayList<Type> toArrayList() {
 		ArrayList<Type> arrayList = new ArrayList<>();
 		if(root == null) {
 			return arrayList;
 		}
-		return toArrayHelper(root, 0, arrayList);
+		return root.toArrayHelper(0, arrayList);
 	}
 	
 	/**
+	 * Writes this graph to a .dot file with the name filename
 	 * 
-	 * @param root
+	 * @param filename
 	 */
-	private ArrayList<Type> toArrayHelper(Node<Type> node, int index, ArrayList<Type> arrayList) {
-		arrayList.add(index, node.data);
-		
-		if(node.left != null) {
-			toArrayHelper(node.left, arrayList.indexOf(node.data), arrayList);
-		}
-		
-		if(node.right != null) {
-			toArrayHelper(node.right, arrayList.indexOf(node.data)+1, arrayList);
-		}
-		
-		return arrayList;
-	}
-	
 	public void writeDot(String filename) {
 		
 		

@@ -446,7 +446,11 @@ public class BinarySearchTreeTest {
 		assertTrue(treeToRemoveBranch.contains(171));
 		assertTrue(treeToRemoveBranch.contains(125));
 	}
-	
+
+	/**
+	 * Tests the removal of a non-root node when it has no successor, 
+	 * i.e. it only has a child on the right
+	 */
 	@Test
 	public void testRemoveBranchNoSuccessor() {
 		treeToRemoveBranch.add(170);

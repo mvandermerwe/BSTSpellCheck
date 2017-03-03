@@ -17,11 +17,11 @@ public class Timing {
 	// Gives us random integers to use during testing.
 	static Random generator = new Random();
 
-	static int bigN = 10000;
-	static int incrementN = 500;
+	final static int BIGN = 10000;
+	final static int INCREMENTN = 500;
 
-	static int testNum = 100000;
-	static int smallTestNum = 50;
+	final static int TESTNUM = 100000;
+	final static int SMALLTESTNUM = 50;
 
 	public static void main(String[] args) {
 		/*
@@ -34,7 +34,7 @@ public class Timing {
 		// Run in order adding test.
 		StringBuilder addData = new StringBuilder();
 		StringBuilder containsData = new StringBuilder();
-		for (int n = 1; n < bigN; n += incrementN) {
+		for (int n = 1; n < BIGN; n += INCREMENTN) {
 			// Clear so we can test new build size.
 			inOrder.clear();
 
@@ -50,7 +50,7 @@ public class Timing {
 		// Run in order adding test.
 		addData = new StringBuilder();
 		containsData = new StringBuilder();
-		for (int n = 1; n < bigN; n += incrementN) {
+		for (int n = 1; n < BIGN; n += INCREMENTN) {
 			// Clear so we can test new build size.
 			randomOrder.clear();
 
@@ -73,7 +73,7 @@ public class Timing {
 		// Run in order adding test for TreeSet.
 		addData = new StringBuilder();
 		containsData = new StringBuilder();
-		for (int n = 1; n < bigN; n += incrementN) {
+		for (int n = 1; n < BIGN; n += INCREMENTN) {
 			// Clear so we can test new build size.
 			inOrderTreeSet.clear();
 
@@ -89,7 +89,7 @@ public class Timing {
 		// Run random order adding test for TreeSet.
 		addData = new StringBuilder();
 		containsData = new StringBuilder();
-		for (int n = 1; n < bigN; n += incrementN) {
+		for (int n = 1; n < BIGN; n += INCREMENTN) {
 			// Clear so we can test new build size.
 			randomTreeSet.clear();
 
@@ -116,7 +116,7 @@ public class Timing {
 	public static long insertInOrder(BinarySearchTree<Integer> binarySearchTree, int N) {
 		long sum = 0;
 
-		for (int numTest = 0; numTest < smallTestNum; numTest++) {
+		for (int numTest = 0; numTest < SMALLTESTNUM; numTest++) {
 			binarySearchTree.clear();
 			long startTime = System.nanoTime();
 			for (int num = 0; num < N; num++) {
@@ -128,7 +128,7 @@ public class Timing {
 		}
 		
 
-		return sum / (N*smallTestNum);
+		return sum / (N*SMALLTESTNUM);
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class Timing {
 	public static long insertRandom(BinarySearchTree<Integer> binarySearchTree, int N) {
 		long sum = 0;
 
-		for (int numTest = 0; numTest < smallTestNum; numTest++) {
+		for (int numTest = 0; numTest < SMALLTESTNUM; numTest++) {
 			binarySearchTree.clear();
 			for (int num = 0; num < N; num++) {
 				int numberToInsert = generator.nextInt(N);
@@ -157,7 +157,7 @@ public class Timing {
 			}
 		}
 
-		return sum / (N * smallTestNum);
+		return sum / (N * SMALLTESTNUM);
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class Timing {
 	public static long contains(BinarySearchTree<Integer> binarySearchTree, int N) {
 		long sum = 0;
 
-		for (int num = 0; num < testNum; num++) {
+		for (int num = 0; num < TESTNUM; num++) {
 			int numberToFind = generator.nextInt(N);
 
 			long startTime = System.nanoTime();
@@ -184,7 +184,7 @@ public class Timing {
 			sum += (endTime - startTime);
 		}
 
-		return sum / testNum;
+		return sum / TESTNUM;
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class Timing {
 	public static long testTreeSetRandom(TreeSet<Integer> treeSet, int N) {
 		long sum = 0;
 
-		for (int numTest = 0; numTest < smallTestNum; numTest++) {
+		for (int numTest = 0; numTest < SMALLTESTNUM; numTest++) {
 			treeSet.clear();
 			for (int num = 0; num < N; num++) {
 				int numberToInsert = generator.nextInt(N);
@@ -213,7 +213,7 @@ public class Timing {
 			}
 		}
 
-		return sum / (N * smallTestNum);
+		return sum / (N * SMALLTESTNUM);
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class Timing {
 	public static long testTreeSetInOrder(TreeSet<Integer> treeSet, int N) {
 		long sum = 0;
 
-		for (int numTest = 0; numTest < smallTestNum; numTest++) {
+		for (int numTest = 0; numTest < SMALLTESTNUM; numTest++) {
 			long startTime = System.nanoTime();
 			for (int num = 0; num < N; num++) {
 				treeSet.add(num);
@@ -240,7 +240,7 @@ public class Timing {
 		}
 
 		
-		return sum / (N * smallTestNum);
+		return sum / (N * SMALLTESTNUM);
 	}
 
 	/**
@@ -257,7 +257,7 @@ public class Timing {
 	public static long contains(TreeSet<Integer> treeSet, int N) {
 		long sum = 0;
 
-		for (int num = 0; num < testNum; num++) {
+		for (int num = 0; num < TESTNUM; num++) {
 			int numberToFind = generator.nextInt(N);
 
 			long startTime = System.nanoTime();
@@ -267,7 +267,7 @@ public class Timing {
 			sum += (endTime - startTime);
 		}
 
-		return sum / (long) testNum;
+		return sum / (long) TESTNUM;
 	}
 
 	private static void sendToFile(StringBuilder fileData, String filename) {

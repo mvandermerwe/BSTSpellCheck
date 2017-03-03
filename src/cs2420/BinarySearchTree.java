@@ -449,5 +449,12 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
 
 		
 	}
+	
+	/**
+	 * @return height of our binary search tree.
+	 */
+	public int getHeight() {
+		return root.height();
+	}
 
 }
